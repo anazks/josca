@@ -37,7 +37,7 @@ export default function Navbar({ onOpenQuote }) {
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Logo"
-              className="h-10 sm:h-12 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/15 transition-transform group-hover:scale-105"
+              className="h-11 sm:h-14 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/20 transition-transform group-hover:scale-105"
             />
           </a>
 

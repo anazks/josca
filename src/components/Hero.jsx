@@ -38,7 +38,7 @@ export default function Hero({ onOpenQuote }) {
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Studio Logo"
-              className="h-20 sm:h-32 md:h-36 w-auto rounded-3xl border-2 border-gold-500/60 shadow-[0_0_40px_rgba(200,169,107,0.35)] object-contain bg-black/60 p-2"
+              className="h-28 sm:h-44 md:h-52 w-auto rounded-3xl border-2 border-gold-500/60 shadow-[0_0_50px_rgba(200,169,107,0.4)] object-contain bg-black/60 p-2.5 sm:p-3 hover:scale-105 transition-transform duration-500"
             />
           </motion.div>
 
