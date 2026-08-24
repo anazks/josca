@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { testimonials } from '../data/testimonialsData';
-import { Star, Quote, ChevronLeft, ChevronRight, MessageSquare, SlidersHorizontal } from 'lucide-react';
+import { Star, Quote, ChevronLeft, ChevronRight, MessageSquare, SlidersHorizontal, Pause, Play } from 'lucide-react';
 
 export default function Testimonials() {
-  const [mobileIndex, setMobileIndex] = useState(0);
-  const [sortBy, setSortBy] = useState('relevant'); // 'relevant', 'newest', 'highest', 'lowest'
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [sortBy, setSortBy] = useState('relevant');
   const [expandedOwnerReply, setExpandedOwnerReply] = useState({});
+  const autoScrollTimer = useRef(null);
 
   const toggleOwnerReply = (id) => {
     setExpandedOwnerReply((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -23,19 +25,45 @@ export default function Testimonials() {
     if (sortBy === 'lowest') {
       return items.sort((a, b) => a.rating - b.rating);
     }
-    return items; // Most relevant
+    return items;
   }, [sortBy]);
 
+  // Auto-scroll loop to the right (next item) every 3.5 seconds
+  useEffect(() => {
+    if (!isPaused) {
+      autoScrollTimer.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % sortedTestimonials.length);
+      }, 3500);
+    }
+    return () => {
+      if (autoScrollTimer.current) clearInterval(autoScrollTimer.current);
+    };
+  }, [isPaused, sortedTestimonials.length]);
+
   const handlePrev = () => {
-    setMobileIndex((prev) => (prev === 0 ? sortedTestimonials.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? sortedTestimonials.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setMobileIndex((prev) => (prev === sortedTestimonials.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev + 1) % sortedTestimonials.length);
   };
 
+  // Get current batch of 3 cards for desktop carousel sliding
+  const visibleDesktopItems = useMemo(() => {
+    const total = sortedTestimonials.length;
+    return [
+      sortedTestimonials[currentIndex % total],
+      sortedTestimonials[(currentIndex + 1) % total],
+      sortedTestimonials[(currentIndex + 2) % total]
+    ];
+  }, [currentIndex, sortedTestimonials]);
+
   return (
-    <section className="relative bg-dark-950 py-16 sm:py-20 border-b border-white/10 overflow-hidden">
+    <section
+      className="relative bg-dark-950 py-16 sm:py-20 border-b border-white/10 overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* Background Ambient Glow */}
       <div className="absolute left-0 bottom-0 w-80 h-80 bg-gold-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -58,7 +86,7 @@ export default function Testimonials() {
             </p>
           </div>
 
-          {/* Sort Dropdown & Google Rating Badge */}
+          {/* Controls & Google Rating Badge */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 bg-dark-800 border border-gold-500/30 px-3 py-1.5 rounded-xl text-xs font-mono text-white">
               <span className="text-gold-400 font-bold">★ 4.9</span>
@@ -70,7 +98,10 @@ export default function Testimonials() {
               <span className="text-[11px] font-mono text-neutral-400 uppercase">Sort:</span>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                  setCurrentIndex(0);
+                }}
                 className="bg-transparent text-xs font-semibold text-white focus:outline-none cursor-pointer"
               >
                 <option value="relevant" className="bg-dark-900 text-white">Most relevant</option>
@@ -79,126 +110,161 @@ export default function Testimonials() {
                 <option value="lowest" className="bg-dark-900 text-white">Lowest rating</option>
               </select>
             </div>
+
+            {/* Play/Pause & Arrow Navigation */}
+            <div className="flex items-center gap-1.5 bg-dark-800 border border-white/10 p-1 rounded-xl">
+              <button
+                onClick={() => setIsPaused(!isPaused)}
+                className="p-1.5 text-neutral-400 hover:text-gold-400 transition-colors"
+                title={isPaused ? "Resume Auto Scroll" : "Pause Auto Scroll"}
+              >
+                {isPaused ? <Play className="w-3.5 h-3.5 text-gold-500" /> : <Pause className="w-3.5 h-3.5 text-neutral-400" />}
+              </button>
+              <button
+                onClick={handlePrev}
+                className="p-1.5 text-neutral-400 hover:text-white transition-colors"
+                aria-label="Previous Review"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="p-1.5 text-neutral-400 hover:text-white transition-colors"
+                aria-label="Next Review"
+              >
+                <ChevronRight className="w-4 h-4 text-gold-500" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Desktop Grid Layout */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedTestimonials.map((item, idx) => (
+        {/* Auto-Scrolling Carousel Grid (Desktop & Tablet) */}
+        <div className="hidden md:block">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className="bg-dark-800/90 border border-white/10 hover:border-gold-500/40 p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between shadow-xl group space-y-4"
+              key={currentIndex}
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              <div className="space-y-3">
-                {/* Author Info & Star Rating */}
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <h4 className="text-sm font-bold font-heading text-white group-hover:text-gold-400 transition-colors uppercase">
-                      {item.author}
-                    </h4>
-                    <span className="text-[10px] font-mono text-neutral-400 block">
-                      {item.badge} • {item.time}
+              {visibleDesktopItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-dark-800/90 border border-white/10 hover:border-gold-500/40 p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between shadow-xl group space-y-4"
+                >
+                  <div className="space-y-3">
+                    {/* Author Info & Star Rating */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h4 className="text-sm font-bold font-heading text-white group-hover:text-gold-400 transition-colors uppercase">
+                          {item.author}
+                        </h4>
+                        <span className="text-[10px] font-mono text-neutral-400 block">
+                          {item.badge} • {item.time}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-0.5 text-gold-500">
+                        {[...Array(item.rating)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Service Tag */}
+                    <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
+                      {item.service}
                     </span>
+
+                    {/* Customer Review Quote */}
+                    <p className="text-xs text-neutral-300 font-sans leading-relaxed">
+                      "{item.quote}"
+                    </p>
                   </div>
-                  <div className="flex items-center gap-0.5 text-gold-500">
-                    {[...Array(item.rating)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
-                    ))}
-                  </div>
+
+                  {/* Owner Reply Expander */}
+                  {item.ownerReply && (
+                    <div className="pt-3 border-t border-white/5">
+                      <button
+                        onClick={() => toggleOwnerReply(item.id)}
+                        className="text-[10px] font-mono text-gold-400/90 hover:text-gold-400 flex items-center gap-1 transition-colors"
+                      >
+                        <MessageSquare className="w-3 h-3 text-gold-500" />
+                        <span>{expandedOwnerReply[item.id] ? 'Hide Owner Reply' : 'View Owner Reply (Team JOS Group)'}</span>
+                      </button>
+                      {expandedOwnerReply[item.id] && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-2 p-3 bg-dark-950/80 rounded-xl border border-gold-500/20 text-[11px] text-neutral-300 space-y-1"
+                        >
+                          <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
+                            Response from Team JOS Group:
+                          </span>
+                          <p className="leading-relaxed italic">{item.ownerReply}</p>
+                        </motion.div>
+                      )}
+                    </div>
+                  )}
                 </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-                {/* Service Tag */}
-                <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
-                  {item.service}
-                </span>
-
-                {/* Customer Review Quote */}
-                <p className="text-xs text-neutral-300 font-sans leading-relaxed">
-                  "{item.quote}"
-                </p>
+        {/* Auto-Scrolling Carousel Card (Mobile) */}
+        <div className="block md:hidden space-y-4">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={sortedTestimonials[currentIndex % sortedTestimonials.length].id}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.4 }}
+              className="bg-dark-800 border border-white/10 p-5 rounded-2xl space-y-3.5 shadow-xl"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h4 className="text-sm font-bold font-heading text-white uppercase">
+                    {sortedTestimonials[currentIndex % sortedTestimonials.length].author}
+                  </h4>
+                  <span className="text-[10px] font-mono text-neutral-400 block">
+                    {sortedTestimonials[currentIndex % sortedTestimonials.length].badge}
+                  </span>
+                </div>
+                <div className="flex items-center gap-0.5 text-gold-500">
+                  {[...Array(sortedTestimonials[currentIndex % sortedTestimonials.length].rating)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
+                  ))}
+                </div>
               </div>
 
-              {/* Owner Reply Expander */}
-              {item.ownerReply && (
-                <div className="pt-3 border-t border-white/5">
-                  <button
-                    onClick={() => toggleOwnerReply(item.id)}
-                    className="text-[10px] font-mono text-gold-400/90 hover:text-gold-400 flex items-center gap-1 transition-colors"
-                  >
-                    <MessageSquare className="w-3 h-3 text-gold-500" />
-                    <span>{expandedOwnerReply[item.id] ? 'Hide Owner Reply' : 'View Owner Reply (Team JOS Group)'}</span>
-                  </button>
-                  {expandedOwnerReply[item.id] && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      className="mt-2 p-3 bg-dark-950/80 rounded-xl border border-gold-500/20 text-[11px] text-neutral-300 space-y-1"
-                    >
-                      <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
-                        Response from Team JOS Group:
-                      </span>
-                      <p className="leading-relaxed italic">{item.ownerReply}</p>
-                    </motion.div>
-                  )}
+              <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
+                {sortedTestimonials[currentIndex % sortedTestimonials.length].service}
+              </span>
+
+              <p className="text-xs text-neutral-300 font-sans leading-relaxed">
+                "{sortedTestimonials[currentIndex % sortedTestimonials.length].quote}"
+              </p>
+
+              {sortedTestimonials[currentIndex % sortedTestimonials.length].ownerReply && (
+                <div className="pt-3 border-t border-white/5 space-y-1">
+                  <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
+                    Response from Team JOS Group:
+                  </span>
+                  <p className="text-[11px] text-neutral-400 italic leading-relaxed">
+                    {sortedTestimonials[currentIndex % sortedTestimonials.length].ownerReply}
+                  </p>
                 </div>
               )}
             </motion.div>
-          ))}
-        </div>
+          </AnimatePresence>
 
-        {/* Mobile Swipeable Carousel */}
-        <div className="block md:hidden space-y-4">
-          <motion.div
-            key={sortedTestimonials[mobileIndex].id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="bg-dark-800 border border-white/10 p-5 rounded-2xl space-y-3.5 shadow-xl"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <h4 className="text-sm font-bold font-heading text-white uppercase">
-                  {sortedTestimonials[mobileIndex].author}
-                </h4>
-                <span className="text-[10px] font-mono text-neutral-400 block">
-                  {sortedTestimonials[mobileIndex].badge}
-                </span>
-              </div>
-              <div className="flex items-center gap-0.5 text-gold-500">
-                {[...Array(sortedTestimonials[mobileIndex].rating)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
-                ))}
-              </div>
-            </div>
-
-            <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
-              {sortedTestimonials[mobileIndex].service}
-            </span>
-
-            <p className="text-xs text-neutral-300 font-sans leading-relaxed">
-              "{sortedTestimonials[mobileIndex].quote}"
-            </p>
-
-            {sortedTestimonials[mobileIndex].ownerReply && (
-              <div className="pt-3 border-t border-white/5 space-y-1">
-                <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
-                  Response from Team JOS Group:
-                </span>
-                <p className="text-[11px] text-neutral-400 italic leading-relaxed">
-                  {sortedTestimonials[mobileIndex].ownerReply}
-                </p>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Mobile Carousel Controls */}
+          {/* Mobile Carousel Indicator Controls */}
           <div className="flex items-center justify-between pt-1">
             <span className="text-xs font-mono text-neutral-400">
-              {mobileIndex + 1} / {sortedTestimonials.length} Reviews
+              {(currentIndex % sortedTestimonials.length) + 1} / {sortedTestimonials.length} Reviews
             </span>
             <div className="flex items-center gap-2">
               <button
@@ -213,7 +279,7 @@ export default function Testimonials() {
                 className="p-2 bg-dark-800 border border-white/10 rounded-lg text-neutral-300 hover:text-white"
                 aria-label="Next Review"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 text-gold-500" />
               </button>
             </div>
           </div>
