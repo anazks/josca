@@ -24,7 +24,7 @@ export default function Home() {
   const handleCloseQuote = () => setQuoteModalOpen(false);
 
   return (
-    <div className="relative min-h-screen bg-dark-950 text-white selection:bg-gold-500 selection:text-black font-sans">
+    <div className="relative min-h-screen bg-dark-950 text-white selection:bg-gold-500 selection:text-black font-sans w-full max-w-full overflow-x-hidden">
       {/* Custom Desktop Ring Cursor */}
       <CustomCursor />
 
@@ -32,7 +32,7 @@ export default function Home() {
       <Navbar onOpenQuote={handleOpenQuote} />
 
       {/* Main Content Sections */}
-      <main>
+      <main className="w-full max-w-full overflow-x-hidden">
         <Hero onOpenQuote={handleOpenQuote} />
         <HeroStats />
         <Services onOpenQuote={handleOpenQuote} />
