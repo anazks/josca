@@ -16,15 +16,12 @@ export default function Footer({ onOpenQuote }) {
           
           {/* Brand Info (2 Cols) */}
           <div className="lg:col-span-2 space-y-4">
-            <a href="#hero" className="inline-flex items-center gap-3 group">
+            <a href="#hero" className="inline-block group">
               <img
                 src="/assets/logo.jpeg"
                 alt="JOS Group Logo"
-                className="h-12 w-auto rounded-lg border border-gold-500/30 object-contain shadow-md"
+                className="h-14 sm:h-16 w-auto rounded-xl border border-gold-500/40 object-contain shadow-lg"
               />
-              <span className="text-3xl font-extrabold tracking-tighter font-display text-white group-hover:text-gold-400 transition-colors">
-                JOS<span className="text-gold-500 ml-1">GROUP</span>
-              </span>
             </a>
             <p className="text-xs text-neutral-400 max-w-sm leading-relaxed">
               {businessConfig.tagline}

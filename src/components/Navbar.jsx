@@ -33,20 +33,12 @@ export default function Navbar({ onOpenQuote }) {
       >
         <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 flex items-center justify-between gap-1.5 sm:gap-2">
           {/* Logo */}
-          <a href="#hero" className="flex items-center gap-2 sm:gap-3 group flex-shrink min-w-0">
+          <a href="#hero" className="flex items-center group flex-shrink-0">
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Logo"
-              className="h-9 sm:h-11 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/10 transition-transform group-hover:scale-105 flex-shrink-0"
+              className="h-10 sm:h-12 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/15 transition-transform group-hover:scale-105"
             />
-            <div className="flex flex-col min-w-0">
-              <span className="text-base sm:text-2xl font-extrabold tracking-tighter font-display text-white group-hover:text-gold-400 transition-colors leading-none truncate">
-                JOS<span className="text-gold-500 ml-0.5 sm:ml-1">GROUP</span>
-              </span>
-              <span className="text-[8px] sm:text-[9px] tracking-widest text-gold-400/90 font-mono uppercase mt-0.5">
-                AUTOMOTIVE CARE
-              </span>
-            </div>
           </a>
 
           {/* Desktop Nav Links */}

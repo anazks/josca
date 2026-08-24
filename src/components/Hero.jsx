@@ -25,29 +25,21 @@ export default function Hero({ onOpenQuote }) {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
-        <div className="max-w-3xl space-y-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
+        <div className="max-w-3xl mx-auto text-center flex flex-col items-center space-y-5">
           
-          {/* Prominent Studio Brand Logo on Hero Banner */}
+          {/* Centered Large Standalone Brand Logo */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="flex items-center gap-3 sm:gap-4 mb-1"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="flex justify-center items-center mb-2"
           >
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Studio Logo"
-              className="h-12 sm:h-16 w-auto rounded-xl border-2 border-gold-500/50 shadow-2xl shadow-gold-500/20 object-contain"
+              className="h-20 sm:h-32 md:h-36 w-auto rounded-3xl border-2 border-gold-500/60 shadow-[0_0_40px_rgba(200,169,107,0.35)] object-contain bg-black/60 p-2"
             />
-            <div className="flex flex-col">
-              <span className="text-xl sm:text-3xl font-extrabold tracking-tighter font-display text-white">
-                JOS<span className="text-gold-500 ml-1">GROUP</span>
-              </span>
-              <span className="text-[9px] sm:text-xs tracking-widest text-gold-400 font-mono uppercase">
-                EST. 30+ YEARS • KERALA
-              </span>
-            </div>
           </motion.div>
 
           {/* Eyebrow */}
@@ -79,7 +71,7 @@ export default function Hero({ onOpenQuote }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-xs sm:text-base text-neutral-300 max-w-lg font-sans font-light leading-relaxed"
+            className="text-xs sm:text-base text-neutral-300 max-w-lg font-sans font-light leading-relaxed text-center"
           >
             Protection, restoration and detailing crafted for people who expect more from their car.
           </motion.p>
@@ -89,7 +81,7 @@ export default function Hero({ onOpenQuote }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-wrap items-center gap-3 pt-2"
+            className="flex flex-wrap items-center justify-center gap-3 pt-2"
           >
             <button
               onClick={onOpenQuote}
