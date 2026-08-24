@@ -28,6 +28,28 @@ export default function Hero({ onOpenQuote }) {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
         <div className="max-w-3xl space-y-6">
           
+          {/* Prominent Studio Brand Logo on Hero Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="flex items-center gap-3 sm:gap-4 mb-1"
+          >
+            <img
+              src="/assets/logo.jpeg"
+              alt="JOS Group Studio Logo"
+              className="h-12 sm:h-16 w-auto rounded-xl border-2 border-gold-500/50 shadow-2xl shadow-gold-500/20 object-contain"
+            />
+            <div className="flex flex-col">
+              <span className="text-xl sm:text-3xl font-extrabold tracking-tighter font-display text-white">
+                JOS<span className="text-gold-500 ml-1">GROUP</span>
+              </span>
+              <span className="text-[9px] sm:text-xs tracking-widest text-gold-400 font-mono uppercase">
+                EST. 30+ YEARS • KERALA
+              </span>
+            </div>
+          </motion.div>
+
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
