@@ -33,8 +33,8 @@ export const businessConfig = {
   },
 
   stats: [
-    { label: "CARS TRANSFORMED", value: "500+", suffix: "" },
-    { label: "YEARS EXPERIENCE", value: "5+", suffix: "" },
+    { label: "VEHICLES TRANSFORMED", value: "90,000+", suffix: "" },
+    { label: "YEARS EXPERIENCE", value: "30+", suffix: "" },
     { label: "ATTENTION TO DETAIL", value: "100%", suffix: "" },
     { label: "SATISFACTION GUARANTEED", value: "5/5", suffix: "★" }
   ]

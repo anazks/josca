@@ -37,13 +37,13 @@ export default function Navbar({ onOpenQuote }) {
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Logo"
-              className="h-8 sm:h-10 w-auto rounded-md border border-gold-500/30 object-contain shadow-md transition-transform group-hover:scale-105 flex-shrink-0"
+              className="h-9 sm:h-11 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/10 transition-transform group-hover:scale-105 flex-shrink-0"
             />
             <div className="flex flex-col min-w-0">
               <span className="text-base sm:text-2xl font-extrabold tracking-tighter font-display text-white group-hover:text-gold-400 transition-colors leading-none truncate">
                 JOS<span className="text-gold-500 ml-0.5 sm:ml-1">GROUP</span>
               </span>
-              <span className="hidden sm:inline-block text-[9px] tracking-widest text-gold-400/90 font-mono uppercase mt-0.5">
+              <span className="text-[8px] sm:text-[9px] tracking-widest text-gold-400/90 font-mono uppercase mt-0.5">
                 AUTOMOTIVE CARE
               </span>
             </div>

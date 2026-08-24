@@ -1,78 +1,151 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { testimonials } from '../data/testimonialsData';
-import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Quote, ChevronLeft, ChevronRight, MessageSquare, SlidersHorizontal } from 'lucide-react';
 
 export default function Testimonials() {
   const [mobileIndex, setMobileIndex] = useState(0);
+  const [sortBy, setSortBy] = useState('relevant'); // 'relevant', 'newest', 'highest', 'lowest'
+  const [expandedOwnerReply, setExpandedOwnerReply] = useState({});
+
+  const toggleOwnerReply = (id) => {
+    setExpandedOwnerReply((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const sortedTestimonials = useMemo(() => {
+    const items = [...testimonials];
+    if (sortBy === 'newest') {
+      return items.sort((a, b) => (a.time.includes('year') ? 1 : -1));
+    }
+    if (sortBy === 'highest') {
+      return items.sort((a, b) => b.rating - a.rating);
+    }
+    if (sortBy === 'lowest') {
+      return items.sort((a, b) => a.rating - b.rating);
+    }
+    return items; // Most relevant
+  }, [sortBy]);
 
   const handlePrev = () => {
-    setMobileIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    setMobileIndex((prev) => (prev === 0 ? sortedTestimonials.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setMobileIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    setMobileIndex((prev) => (prev === sortedTestimonials.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <section className="relative bg-dark-950 py-16 sm:py-20 border-b border-white/10 overflow-hidden">
-      {/* Background Glow */}
+      {/* Background Ambient Glow */}
       <div className="absolute left-0 bottom-0 w-80 h-80 bg-gold-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-mono tracking-widest text-gold-500 uppercase">
-            <span>// CLIENT REVIEWS</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div className="space-y-2.5 max-w-2xl">
+            <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-mono tracking-widest text-gold-500 uppercase">
+              <Star className="w-3.5 h-3.5 fill-gold-500" />
+              <span>VERIFIED GOOGLE REVIEWS</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display text-white uppercase tracking-tight leading-none">
+              TRUSTED BY <span className="text-gold-gradient">CAR LOVERS.</span>
+            </h2>
+
+            <p className="text-xs sm:text-base text-neutral-300 font-sans font-light">
+              Read authentic Google reviews from car owners across Ernakulam, Tripunithura, and Udayamperoor.
+            </p>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display text-white uppercase tracking-tight">
-            TRUSTED BY <span className="text-gold-gradient">CAR LOVERS.</span>
-          </h2>
+          {/* Sort Dropdown & Google Rating Badge */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 bg-dark-800 border border-gold-500/30 px-3 py-1.5 rounded-xl text-xs font-mono text-white">
+              <span className="text-gold-400 font-bold">★ 4.9</span>
+              <span className="text-neutral-400">Google Rating</span>
+            </div>
 
-          <p className="text-xs sm:text-base text-neutral-300 font-sans font-light">
-            Read authentic experiences from luxury vehicle owners who trust JOS Group with their prized automobiles.
-          </p>
+            <div className="flex items-center gap-2 bg-dark-800 border border-white/10 px-3 py-1.5 rounded-xl">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-gold-500" />
+              <span className="text-[11px] font-mono text-neutral-400 uppercase">Sort:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-transparent text-xs font-semibold text-white focus:outline-none cursor-pointer"
+              >
+                <option value="relevant" className="bg-dark-900 text-white">Most relevant</option>
+                <option value="newest" className="bg-dark-900 text-white">Newest</option>
+                <option value="highest" className="bg-dark-900 text-white">Highest rating</option>
+                <option value="lowest" className="bg-dark-900 text-white">Lowest rating</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Desktop Grid Layout */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5">
-          {testimonials.map((item, idx) => (
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedTestimonials.map((item, idx) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="bg-dark-800 border border-white/10 hover:border-gold-500/50 p-5 sm:p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between shadow-xl group"
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              className="bg-dark-800/90 border border-white/10 hover:border-gold-500/40 p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between shadow-xl group space-y-4"
             >
               <div className="space-y-3">
-                {/* Rating Stars */}
-                <div className="flex items-center gap-1 text-gold-500">
-                  {[...Array(item.rating)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
-                  ))}
+                {/* Author Info & Star Rating */}
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h4 className="text-sm font-bold font-heading text-white group-hover:text-gold-400 transition-colors uppercase">
+                      {item.author}
+                    </h4>
+                    <span className="text-[10px] font-mono text-neutral-400 block">
+                      {item.badge} • {item.time}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-0.5 text-gold-500">
+                    {[...Array(item.rating)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
+                    ))}
+                  </div>
                 </div>
 
-                {/* Quote Text */}
-                <p className="text-xs sm:text-sm text-neutral-300 font-sans italic leading-relaxed">
+                {/* Service Tag */}
+                <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
+                  {item.service}
+                </span>
+
+                {/* Customer Review Quote */}
+                <p className="text-xs text-neutral-300 font-sans leading-relaxed">
                   "{item.quote}"
                 </p>
               </div>
 
-              {/* Author & Car Info */}
-              <div className="pt-4 border-t border-white/5 space-y-0.5">
-                <div className="text-xs sm:text-sm font-bold font-heading text-white group-hover:text-gold-400 transition-colors uppercase">
-                  {item.author}
+              {/* Owner Reply Expander */}
+              {item.ownerReply && (
+                <div className="pt-3 border-t border-white/5">
+                  <button
+                    onClick={() => toggleOwnerReply(item.id)}
+                    className="text-[10px] font-mono text-gold-400/90 hover:text-gold-400 flex items-center gap-1 transition-colors"
+                  >
+                    <MessageSquare className="w-3 h-3 text-gold-500" />
+                    <span>{expandedOwnerReply[item.id] ? 'Hide Owner Reply' : 'View Owner Reply (Team JOS Group)'}</span>
+                  </button>
+                  {expandedOwnerReply[item.id] && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="mt-2 p-3 bg-dark-950/80 rounded-xl border border-gold-500/20 text-[11px] text-neutral-300 space-y-1"
+                    >
+                      <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
+                        Response from Team JOS Group:
+                      </span>
+                      <p className="leading-relaxed italic">{item.ownerReply}</p>
+                    </motion.div>
+                  )}
                 </div>
-                <div className="text-[11px] font-mono text-gold-500 font-medium">
-                  {item.carModel}
-                </div>
-                <div className="text-[9px] text-neutral-500 uppercase tracking-wider">
-                  {item.service}
-                </div>
-              </div>
+              )}
             </motion.div>
           ))}
         </div>
@@ -80,57 +153,67 @@ export default function Testimonials() {
         {/* Mobile Swipeable Carousel */}
         <div className="block md:hidden space-y-4">
           <motion.div
-            key={testimonials[mobileIndex].id}
+            key={sortedTestimonials[mobileIndex].id}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="bg-dark-800 border border-white/10 p-6 rounded-2xl space-y-4 shadow-xl"
+            className="bg-dark-800 border border-white/10 p-5 rounded-2xl space-y-3.5 shadow-xl"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 text-gold-500">
-                {[...Array(testimonials[mobileIndex].rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-gold-500" />
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <h4 className="text-sm font-bold font-heading text-white uppercase">
+                  {sortedTestimonials[mobileIndex].author}
+                </h4>
+                <span className="text-[10px] font-mono text-neutral-400 block">
+                  {sortedTestimonials[mobileIndex].badge}
+                </span>
+              </div>
+              <div className="flex items-center gap-0.5 text-gold-500">
+                {[...Array(sortedTestimonials[mobileIndex].rating)].map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-gold-500" />
                 ))}
               </div>
-              <Quote className="w-6 h-6 text-gold-500/30" />
             </div>
 
-            <p className="text-sm text-neutral-300 font-sans italic leading-relaxed">
-              "{testimonials[mobileIndex].quote}"
+            <span className="inline-block text-[10px] font-mono text-gold-400 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full uppercase">
+              {sortedTestimonials[mobileIndex].service}
+            </span>
+
+            <p className="text-xs text-neutral-300 font-sans leading-relaxed">
+              "{sortedTestimonials[mobileIndex].quote}"
             </p>
 
-            <div className="pt-4 border-t border-white/5 space-y-1">
-              <div className="text-sm font-bold font-heading text-white uppercase">
-                {testimonials[mobileIndex].author}
+            {sortedTestimonials[mobileIndex].ownerReply && (
+              <div className="pt-3 border-t border-white/5 space-y-1">
+                <span className="text-[10px] font-mono text-gold-500 font-bold block uppercase">
+                  Response from Team JOS Group:
+                </span>
+                <p className="text-[11px] text-neutral-400 italic leading-relaxed">
+                  {sortedTestimonials[mobileIndex].ownerReply}
+                </p>
               </div>
-              <div className="text-xs font-mono text-gold-500">
-                {testimonials[mobileIndex].carModel}
-              </div>
-              <div className="text-[10px] text-neutral-400 uppercase">
-                {testimonials[mobileIndex].service}
-              </div>
-            </div>
+            )}
           </motion.div>
 
-          {/* Carousel Controls */}
-          <div className="flex items-center justify-between pt-2">
+          {/* Mobile Carousel Controls */}
+          <div className="flex items-center justify-between pt-1">
             <span className="text-xs font-mono text-neutral-400">
-              {mobileIndex + 1} / {testimonials.length}
+              {mobileIndex + 1} / {sortedTestimonials.length} Reviews
             </span>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrev}
-                className="p-2.5 bg-dark-800 border border-white/10 rounded-lg text-neutral-300 hover:text-white"
-                aria-label="Previous Testimonial"
+                className="p-2 bg-dark-800 border border-white/10 rounded-lg text-neutral-300 hover:text-white"
+                aria-label="Previous Review"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNext}
-                className="p-2.5 bg-dark-800 border border-white/10 rounded-lg text-neutral-300 hover:text-white"
-                aria-label="Next Testimonial"
+                className="p-2 bg-dark-800 border border-white/10 rounded-lg text-neutral-300 hover:text-white"
+                aria-label="Next Review"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
