@@ -28,22 +28,22 @@ export default function Navbar({ onOpenQuote }) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass-nav py-4 shadow-2xl' : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-6'
+          scrolled ? 'glass-nav py-3 sm:py-4 shadow-2xl' : 'bg-gradient-to-b from-black/90 via-black/50 to-transparent py-3.5 sm:py-6'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2">
           {/* Logo */}
-          <a href="#hero" className="flex items-center gap-3 group">
+          <a href="#hero" className="flex items-center gap-2 sm:gap-3 group flex-shrink min-w-0">
             <img
               src="/assets/logo.jpeg"
               alt="JOS Group Logo"
-              className="h-9 sm:h-11 w-auto rounded-lg border border-gold-500/30 object-contain shadow-md transition-transform group-hover:scale-105"
+              className="h-8 sm:h-10 w-auto rounded-md border border-gold-500/30 object-contain shadow-md transition-transform group-hover:scale-105 flex-shrink-0"
             />
-            <div className="flex flex-col">
-              <span className="text-xl sm:text-2xl font-extrabold tracking-tighter font-display text-white group-hover:text-gold-400 transition-colors leading-none">
-                JOS<span className="text-gold-500 ml-1">GROUP</span>
+            <div className="flex flex-col min-w-0">
+              <span className="text-base sm:text-2xl font-extrabold tracking-tighter font-display text-white group-hover:text-gold-400 transition-colors leading-none truncate">
+                JOS<span className="text-gold-500 ml-0.5 sm:ml-1">GROUP</span>
               </span>
-              <span className="text-[9px] tracking-widest text-gold-400/90 font-mono uppercase mt-0.5">
+              <span className="hidden sm:inline-block text-[9px] tracking-widest text-gold-400/90 font-mono uppercase mt-0.5">
                 AUTOMOTIVE CARE
               </span>
             </div>
@@ -63,7 +63,7 @@ export default function Navbar({ onOpenQuote }) {
             ))}
           </nav>
 
-          {/* Right Action Button */}
+          {/* Right Action Button (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
             <a
               href={`tel:${businessConfig.phoneRaw}`}
@@ -85,21 +85,21 @@ export default function Navbar({ onOpenQuote }) {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-3">
+          {/* Mobile Action & Menu Button */}
+          <div className="flex md:hidden items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <button
               onClick={onOpenQuote}
-              className="px-3 py-1.5 bg-gold-gradient text-black text-[11px] font-bold tracking-wider rounded"
+              className="px-2.5 py-1.5 bg-gold-gradient text-black text-[10px] font-bold tracking-wider rounded shadow-sm whitespace-nowrap"
             >
               QUOTE
             </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-white p-2 focus:outline-none"
+              className="text-white p-1.5 sm:p-2 focus:outline-none flex-shrink-0"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-gold-500" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-6 h-6 text-gold-500" /> : <Menu className="w-6 h-6 text-white" />}
             </button>
           </div>
         </div>

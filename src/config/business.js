@@ -22,8 +22,8 @@ export const businessConfig = {
   instagramHandle: "@jos_cars",
   
   location: {
-    address: "Plot 42, Auto Luxury Boulevard, Phase 2",
-    city: "Mumbai, MH 400051",
+    address: "Kandanadu P.O., Udayamperoor",
+    city: "Ernakulam, Kerala - 682305",
     googleMapsUrl: "https://maps.google.com"
   },
 
