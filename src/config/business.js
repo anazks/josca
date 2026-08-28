@@ -5,7 +5,7 @@
 export const businessConfig = {
   name: "JOS Group",
   tagline: "PREMIUM AUTOMOTIVE CARE & DETAILING STUDIO",
-  logo: "/assets/logo.jpeg",
+  logo: "/assets/logo.png",
   
   // Contact details
   phone: "+91 99478 12555",

@@ -4,7 +4,7 @@ import { ArrowDown, Shield, Sparkles, ChevronRight } from 'lucide-react';
 
 export default function Hero({ onOpenQuote }) {
   return (
-    <section id="hero" className="relative w-full h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-dark-950">
+    <section id="hero" className="relative w-full min-h-screen sm:h-screen sm:min-h-[700px] flex items-center justify-center overflow-hidden bg-dark-950 pt-24 sm:pt-16 pb-16 sm:pb-0">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <motion.img
@@ -25,21 +25,47 @@ export default function Hero({ onOpenQuote }) {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
-        <div className="max-w-3xl mx-auto text-center flex flex-col items-center space-y-5">
-          
-          {/* Centered Large Standalone Brand Logo */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-3xl mx-auto text-center flex flex-col items-center space-y-4 sm:space-y-5">
+
+          {/* Centered Standalone Brand Logo with Motion & Floating Effect */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="flex justify-center items-center mb-2"
+            initial={{ opacity: 0, scale: 0.85, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex justify-center items-center my-1 sm:my-2 group cursor-pointer"
           >
-            <img
-              src="/assets/logo.jpeg"
-              alt="JOS Group Studio Logo"
-              className="h-28 sm:h-44 md:h-52 w-auto rounded-3xl border-2 border-gold-500/60 shadow-[0_0_50px_rgba(200,169,107,0.4)] object-contain bg-black/60 p-2.5 sm:p-3 hover:scale-105 transition-transform duration-500"
+            {/* Animated Golden Ambient Glow Aura */}
+            <motion.div
+              animate={{
+                opacity: [0.35, 0.65, 0.35],
+                scale: [0.95, 1.1, 0.95],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute -inset-4 sm:-inset-8 lg:-inset-10 bg-gold-500/25 blur-2xl sm:blur-3xl rounded-full pointer-events-none"
             />
+
+            {/* Floating Animation Wrapper */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{
+                duration: 4.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              whileHover={{ scale: 1.05 }}
+              className="relative z-10"
+            >
+              <img
+                src="/assets/logo.png"
+                alt="JOS Group Studio Logo"
+                className="h-32 xs:h-40 sm:h-52 md:h-60 lg:h-64 xl:h-72 max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl w-auto object-contain filter drop-shadow-[0_10px_30px_rgba(200,169,107,0.4)] transition-all duration-500"
+              />
+            </motion.div>
           </motion.div>
 
           {/* Eyebrow */}
@@ -47,7 +73,7 @@ export default function Hero({ onOpenQuote }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 border border-gold-500/30 bg-black/60 backdrop-blur-md px-3.5 py-1 rounded-full text-gold-500 text-[10px] sm:text-xs font-mono tracking-widest uppercase"
+            className="inline-flex items-center gap-1.5 sm:gap-2 border border-gold-500/30 bg-black/60 backdrop-blur-md px-3 sm:px-3.5 py-1 rounded-full text-gold-500 text-[10px] sm:text-xs font-mono tracking-widest uppercase"
           >
             <Sparkles className="w-3 h-3" />
             <span>PREMIUM AUTOMOTIVE CARE</span>
@@ -59,7 +85,7 @@ export default function Hero({ onOpenQuote }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-[1.05]">
+            <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-[1.1] sm:leading-[1.05]">
               YOUR CAR.
               <br />
               <span className="text-gold-gradient">PERFECTED.</span>
@@ -71,7 +97,7 @@ export default function Hero({ onOpenQuote }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-xs sm:text-base text-neutral-300 max-w-lg font-sans font-light leading-relaxed text-center"
+            className="text-xs sm:text-base text-neutral-300 max-w-xs sm:max-w-lg font-sans font-light leading-relaxed text-center px-2 sm:px-0"
           >
             Protection, restoration and detailing crafted for people who expect more from their car.
           </motion.p>
@@ -81,11 +107,11 @@ export default function Hero({ onOpenQuote }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-wrap items-center justify-center gap-3 pt-2"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto pt-1 sm:pt-2 px-4 sm:px-0"
           >
             <button
               onClick={onOpenQuote}
-              className="px-5 py-3 sm:px-6 sm:py-3.5 bg-gold-gradient text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:brightness-110 transition-all duration-300 shadow-xl shadow-gold-500/25 flex items-center gap-2 group"
+              className="w-full sm:w-auto px-5 py-3 sm:px-6 sm:py-3.5 bg-gold-gradient text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:brightness-110 transition-all duration-300 shadow-xl shadow-gold-500/25 flex items-center justify-center gap-2 group"
             >
               <Shield className="w-3.5 h-3.5" />
               <span>GET A FREE QUOTE</span>
@@ -94,7 +120,7 @@ export default function Hero({ onOpenQuote }) {
 
             <a
               href="#services"
-              className="px-5 py-3 sm:px-6 sm:py-3.5 border border-white/20 bg-black/40 backdrop-blur-md text-white font-semibold uppercase tracking-wider text-xs rounded-xl hover:border-gold-500/60 hover:text-gold-400 transition-all duration-300"
+              className="w-full sm:w-auto px-5 py-3 sm:px-6 sm:py-3.5 border border-white/20 bg-black/40 backdrop-blur-md text-white font-semibold uppercase tracking-wider text-xs rounded-xl hover:border-gold-500/60 hover:text-gold-400 transition-all duration-300 text-center"
             >
               EXPLORE OUR SERVICES
             </a>
@@ -107,9 +133,9 @@ export default function Hero({ onOpenQuote }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-neutral-400 hover:text-gold-500 transition-colors"
+        className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-2 text-neutral-400 hover:text-gold-500 transition-colors"
       >
-        <a href="#stats" className="flex flex-col items-center gap-2 text-[10px] font-mono tracking-widest uppercase">
+        <a href="#services" className="flex flex-col items-center gap-2 text-[10px] font-mono tracking-widest uppercase">
           <span>SCROLL TO EXPLORE</span>
           <motion.div
             animate={{ y: [0, 6, 0] }}

@@ -35,9 +35,9 @@ export default function Navbar({ onOpenQuote }) {
           {/* Logo */}
           <a href="#hero" className="flex items-center group flex-shrink-0">
             <img
-              src="/assets/logo.jpeg"
+              src="/assets/logo.png"
               alt="JOS Group Logo"
-              className="h-11 sm:h-14 w-auto rounded-lg border border-gold-500/40 object-contain shadow-lg shadow-gold-500/20 transition-transform group-hover:scale-105"
+              className="h-9 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105 filter drop-shadow"
             />
           </a>
 

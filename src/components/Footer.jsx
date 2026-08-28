@@ -18,9 +18,9 @@ export default function Footer({ onOpenQuote }) {
           <div className="lg:col-span-2 space-y-4">
             <a href="#hero" className="inline-block group">
               <img
-                src="/assets/logo.jpeg"
+                src="/assets/logo.png"
                 alt="JOS Group Logo"
-                className="h-14 sm:h-16 w-auto rounded-xl border border-gold-500/40 object-contain shadow-lg"
+                className="h-16 sm:h-20 w-auto object-contain transition-transform group-hover:scale-105 filter drop-shadow-md"
               />
             </a>
             <p className="text-xs text-neutral-400 max-w-sm leading-relaxed">
