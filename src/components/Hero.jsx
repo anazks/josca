@@ -63,7 +63,7 @@ export default function Hero({ onOpenQuote }) {
               <img
                 src="/assets/logo.png"
                 alt="JOS Group Studio Logo"
-                className="h-32 xs:h-40 sm:h-52 md:h-60 lg:h-64 xl:h-72 max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl w-auto object-contain filter drop-shadow-[0_10px_30px_rgba(200,169,107,0.4)] transition-all duration-500"
+                className="h-48 xs:h-60 sm:h-56 md:h-64 lg:h-64 xl:h-72 max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl w-auto object-contain filter drop-shadow-[0_10px_35px_rgba(200,169,107,0.45)] transition-all duration-500"
               />
             </motion.div>
           </motion.div>
@@ -85,11 +85,13 @@ export default function Hero({ onOpenQuote }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-[1.1] sm:leading-[1.05]">
+            {/* Primary SEO H1 */}
+            <h1 className="sr-only">JOS Group – Premium Car Care & Auto Services</h1>
+            <p className="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-[1.1] sm:leading-[1.05]">
               YOUR CAR.
               <br />
               <span className="text-gold-gradient">PERFECTED.</span>
-            </h1>
+            </p>
           </motion.div>
 
           {/* Description */}
